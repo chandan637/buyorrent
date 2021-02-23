@@ -92,7 +92,7 @@ const PostPage = (): any => {
             </Form.Group>
 
             <Form.Group controlId="images">
-              <Form.Label>Images</Form.Label>
+              <Form.Label>Images (not implemented yet)</Form.Label>
               <Form.File id="images" label="Example file input" multiple />
             </Form.Group>
 
