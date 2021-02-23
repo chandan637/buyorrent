@@ -1,12 +1,15 @@
-# buyorrent
+## run locally on machine please make sure Nodejs and mongodb are installed and mongod service is running.
 
-# run locally on machine please make sure mongodb is installed and mongod service is running.
-
-#run following command to start the server
+### Run following command to build frontend
+```
 cd ui
 npm i 
 npm run build
+```
+### Run following command to start the server
 
+```
 cd api
 npm i 
 npm run dev 
+```
