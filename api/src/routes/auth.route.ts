@@ -18,8 +18,6 @@ class AuthRoute implements Route {
     this.router.post('/login', validationMiddleware(CreateUserDto, 'body'), this.authController.logIn);
     this.router.post('/google-success', this.authController.googleAuthSuccess);
     this.router.post('/logout', authMiddleware, this.authController.logOut);
-    // this.router.get('/google/auth', this.authController.googleSignIn);
-    // this.router.get('/google/auth_callback', this.authController.googleSignInCallback);
   }
 }
 

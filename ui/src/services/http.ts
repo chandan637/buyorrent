@@ -30,7 +30,7 @@ axios.interceptors.response.use(
       localStorage.setItem('user', JSON.stringify(response?.data?.data));
       window.location.href = '/list-property';
     }
-    else if(url === 'logout' && status === 200){
+    else if(url === '/logout' && status === 200){
       localStorage.removeItem('isLoggedIn')
       localStorage.removeItem('user');
       localStorage.clear();

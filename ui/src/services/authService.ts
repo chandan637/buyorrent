@@ -9,5 +9,5 @@ export const gLoginSuccess = (data: any) => {
 };
 
 export const logout = () => {
-  return axios.post('/logout')
+  return axios.post("/logout");
 };

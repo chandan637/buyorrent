@@ -17,10 +17,8 @@ const session = require('express-session');
 const passport = require('passport');
 import userModel from './models/users.model';
 import UserService from './services/users.service';
-import AuthService from './services/auth.service';
 
 const userService = new UserService();
-const authService = new AuthService();
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 import path from 'path';
 

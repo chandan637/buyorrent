@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import { useUser } from "../Common/UserContext";
-// import { useToken } from "../Common/TokenContext";
-import useDataApi from "../Common/useDataApi";
 import { useHistory } from "react-router-dom";
 import { Row, Col, Button, Card, CardGroup } from "react-bootstrap";
 import LoadingPage from "../Common/Loading";

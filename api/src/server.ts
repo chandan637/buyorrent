@@ -7,6 +7,9 @@ import validateEnv from './utils/validateEnv';
 
 validateEnv();
 
-const app = new App([ new UsersRoute(), new AuthRoute(), new PropertyRoute()]);
-
-app.listen();
+const app = new App([new UsersRoute(), new AuthRoute(), new PropertyRoute()]);
+try {
+  app.listen();
+} catch (err) {
+  return logger.error('Error:', err.message);
+}
