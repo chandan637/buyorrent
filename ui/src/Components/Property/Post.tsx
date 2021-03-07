@@ -1,11 +1,43 @@
 import React, { useState } from "react";
-import { Row, Col, Button, Form } from "react-bootstrap";
+import { Row, Col, Button, Form, Image } from "react-bootstrap";
 import LoadingPage from "../Common/Loading";
 import { createProperty } from "../../services/propertyService";
+import { getKeyValue } from "../../utils/appUtils";
+import { useHistory } from "react-router-dom";
+
+interface IProperty {
+  title: string;
+  type: string;
+  sqArea: number;
+  description: string;
+  images: File[];
+  price: number;
+  priceCycle: string;
+  contactNo: string;
+  isBuyable: boolean;
+  isRentable: boolean;
+  purpose: string;
+  city: string;
+  address: string;
+}
+
+const createFormData = (state: IProperty) => {
+  return Object.keys(state).reduce((res: any, key: any) => {
+    const value = getKeyValue(state, key);
+    if (key === "images") {
+      value.forEach((file: File, index: number) => {
+        res.append(`images`, file);
+      });
+    } else {
+      res.append(key, value);
+    }
+    return res;
+  }, new FormData());
+};
 
 const PostPage = (): any => {
   const [loading, setLoading] = useState(false);
-  const [state, setState] = useState({
+  const [state, setState] = useState<IProperty>({
     title: "",
     type: "residential",
     sqArea: 0,
@@ -20,6 +52,8 @@ const PostPage = (): any => {
     city: "",
     address: "",
   });
+
+  const history = useHistory();
 
   if (loading) {
     return <LoadingPage />;
@@ -36,11 +70,28 @@ const PostPage = (): any => {
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     setLoading(true);
-    try{
-    const newPost = await createProperty(state);
-    }finally{
-    setLoading(false);
+    try {
+      const formdata = createFormData(state);
+      await createProperty(formdata);
+      return history.push('/list-property');
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const addFile = (e: any) => {
+    const images = [...state.images, ...e.target.files];
+    setState((prevState) => ({
+      ...prevState,
+      images,
+    }));
+  };
+
+  const removeFile = (index: number) => {
+    setState((prevState) => ({
+      ...prevState,
+      images: state.images.filter((img, imgIndex) => imgIndex !== index),
+    }));
   };
 
   const validateForm = () => {
@@ -52,7 +103,8 @@ const PostPage = (): any => {
       state.priceCycle.length &&
       state.contactNo.length &&
       state.purpose.length &&
-      state.address.length
+      state.address.length &&
+      state.images.length
     );
   };
 
@@ -92,9 +144,28 @@ const PostPage = (): any => {
             </Form.Group>
 
             <Form.Group controlId="images">
-              <Form.Label>Images (not implemented yet)</Form.Label>
-              <Form.File id="images" label="Example file input" multiple />
+              <Form.Label>Images</Form.Label>
+              <Form.File
+                // ref={fileUploadRef}
+                id="images"
+                label="Example file input"
+                multiple
+                onChange={addFile}
+                accept="image/gif, image/jpeg, image/png"
+              />
             </Form.Group>
+            {state.images.length > 0 && (
+              <Row>
+                {state.images.map((imgObj, index) => (
+                  <Col xs={6} md={3}>
+                    <Image src={URL.createObjectURL(imgObj)} thumbnail />
+                    <Button variant="link" onClick={() => removeFile(index)}>
+                      Remove
+                    </Button>
+                  </Col>
+                ))}
+              </Row>
+            )}
 
             <Form.Group controlId="sqArea">
               <Form.Label>Sq. Area</Form.Label>
@@ -107,7 +178,7 @@ const PostPage = (): any => {
 
             <Form.Group controlId="price">
               <Form.Label>
-                 {state.purpose === "rent" ? "Rent (Monthly)" : "Price"}
+                {state.purpose === "rent" ? "Rent (Monthly)" : "Price"}
               </Form.Label>
               <Form.Control
                 type="number"
@@ -142,12 +213,7 @@ const PostPage = (): any => {
                 onChange={handleChange}
               />
             </Form.Group>
-            <Button
-              block
-              size="lg"
-              type="submit"
-              disabled={!validateForm()}
-            >
+            <Button block size="lg" type="submit" disabled={!validateForm()}>
               Post Property
             </Button>
           </Form>

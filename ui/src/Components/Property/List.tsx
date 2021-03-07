@@ -1,27 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { Row, Col, Button, Card, CardGroup } from "react-bootstrap";
+import { Row, Col, Button, Card, CardColumns } from "react-bootstrap";
 import LoadingPage from "../Common/Loading";
 
 import { listProperty } from "../../services/propertyService";
-
-interface Property {
-  title: string;
-  sqArea: number;
-  description: string;
-  images: { url: string; name: string }[];
-  price: number;
-  priceCycle: string;
-  contactNo: string;
-  isBuyable: boolean;
-  isRentable: boolean;
-  soldOn: number; // epoc date
-  purchasedBy: string; //
-  createdBy: string;
-  createdAt: number; // epoc date
-  city: String;
-  address: String;
-}
 
 const ListPage = (): any => {
   const [properties, setProperties] = useState<any[]>([]);
@@ -48,15 +30,20 @@ const ListPage = (): any => {
       <Col md="2" />
       <Col md="8">
         <div className="my-3 p-3 bg-white rounded shadow-sm">
-        <Button onClick={()=> history.push('/post-property')} style={{float: 'right'}}>Post Property</Button>
+          <Button
+            onClick={() => history.push("/post-property")}
+            style={{ float: "right" }}
+          >
+            Post Property
+          </Button>
           <h6 className="border-bottom border-gray pb-2 mb-0">
             Recent Property
           </h6>
-          
-          <CardGroup>
+
+          <CardColumns>
             {(properties || []).map((property: any = {}) => (
               <Card style={{ width: "18rem" }}>
-                <Card.Img variant="top" src="prop-tile.svg" />
+                <Card.Img src={property.images[0].path.replace('public','')}/>
                 <Card.Body>
                   <Card.Title>{property.title}</Card.Title>
                   <Card.Text>{property.description}</Card.Text>
@@ -76,7 +63,7 @@ const ListPage = (): any => {
                 </Card.Body>
               </Card>
             ))}
-          </CardGroup>
+          </CardColumns>
         </div>
       </Col>
       <Col md="2" />

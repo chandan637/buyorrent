@@ -40,6 +40,10 @@ class PropertyController {
 
   public createProperty = async (req: Request, res: Response, next: NextFunction) => {
     const propertyData: CreatePropertyDto = req.body;
+    propertyData.images = Object.values(req['files']);
+    propertyData.images = propertyData.images.map(img => {
+      return { ...img, path: img.path.replace('public', '') };
+    });
 
     try {
       const createPropertyData: Property = await this.propertyService.createProperty(propertyData);

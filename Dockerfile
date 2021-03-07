@@ -4,14 +4,16 @@ WORKDIR /app
 
 COPY . .
 
-#RUN ls -la .
 
-RUN cd /app/ui && npm install && cd ..
+WORKDIR /app/ui
 
-RUN cd /app/api && npm install && npm run build
+RUN npm install && npm run build
+
+WORKDIR /app/api
+
+RUN npm install && npm run build
 
 EXPOSE 3333
 
-WORKDIR /app/api
 
 CMD ["npm", "start"]

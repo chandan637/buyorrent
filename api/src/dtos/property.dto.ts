@@ -13,7 +13,7 @@ export class CreatePropertyDto {
 
   @IsOptional()
   @IsArray()
-  public images: Array<{ url: string; name: string }>;
+  public images: Array<any>;
 
   @IsNumber()
   public price: number;

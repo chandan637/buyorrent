@@ -1,7 +1,7 @@
 import axios from "./http";
 
 export const createProperty = (data: any) => {
-  return axios.post("properties", data);
+  return axios.post("properties", data, { headers: {"Content-Type": "multipart/form-data"}});
 };
 
 export const listProperty = () => {
@@ -13,5 +13,5 @@ export const getProperty = (id: string) => {
 };
 
 export const buyOrRentProperty = (id: string) => {
-  return axios.post(`properties/${id}/buy-rent`);
+  return axios.put(`properties/${id}`);
 };

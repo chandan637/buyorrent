@@ -7,10 +7,6 @@ axios.interceptors.request.use(
   function (config) {
     // Do something before request is sent
     config["baseURL"] = API_URL;
-    // Add Auth Header
-    if (!preLoginUrls.includes(config.url || "")) {
-      console.log("====post login calls");
-    }
     return config;
   },
   function (error) {
@@ -30,7 +26,7 @@ axios.interceptors.response.use(
       localStorage.setItem('user', JSON.stringify(response?.data?.data));
       window.location.href = '/list-property';
     }
-    else if(url === '/logout' && status === 200){
+    else if(url === '/logout'){
       localStorage.removeItem('isLoggedIn')
       localStorage.removeItem('user');
       localStorage.clear();
