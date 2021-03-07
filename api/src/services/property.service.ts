@@ -10,6 +10,7 @@ class PropertyService {
   public async findByQuery(query, skip = 0, limit = 100): Promise<Property[]> {
     const listing: Property[] = await this.properties
       .find({ ...query })
+      .select({ title: 1, description: 1, createdAt: 1, _id: 1, images: 1 })
       .skip(skip)
       .limit(limit)
       .lean()
@@ -17,7 +18,7 @@ class PropertyService {
     return listing;
   }
 
-  public async findPropertyById(_id: string, projection=null): Promise<Property> {
+  public async findPropertyById(_id: string, projection = null): Promise<Property> {
     const findProperty: Property = await this.properties.findOne({ _id }, projection).lean().exec();
     if (!findProperty) throw new HttpException(409, 'No such Property');
 
@@ -37,19 +38,12 @@ class PropertyService {
   public async updateProperty(_id: string, PropertyData: Property): Promise<Property> {
     if (isEmpty(PropertyData)) throw new HttpException(400, "You're not PropertyData");
 
-    
     const updatePropertyById: Property = await this.properties.findByIdAndUpdate(_id, { ...PropertyData });
     if (!updatePropertyById) throw new HttpException(409, "You're not Property");
 
     return updatePropertyById;
   }
 
-  // public async deleteUserData(userId: string): Promise<User> {
-  //   const deleteUserById: User = await this.users.findByIdAndDelete(userId);
-  //   if (!deleteUserById) throw new HttpException(409, "You're not user");
-
-  //   return deleteUserById;
-  // }
 }
 
 export default PropertyService;

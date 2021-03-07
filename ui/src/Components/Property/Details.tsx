@@ -1,31 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Button, Card } from "react-bootstrap";
+import { Row, Col, Button, Card, Carousel } from "react-bootstrap";
 import LoadingPage from "../Common/Loading";
 import { getProperty } from "../../services/propertyService";
-import { AxiosResponse } from "axios";
 import { useHistory } from "react-router-dom";
 
 const DetailPage = (props: any): any => {
   const [loading, setLoading] = useState(false);
   const [property, setProperty] = useState<any>({});
-  // title: "",
-  // type: "",
-  // sqArea: 0,
-  // description: "",
-  // images: [],
-  // price: 0,
-  // priceCycle: "", // monthly for rent
-  // contactNo: "",
-  // isBuyable: false,
-  // isRentable: false,
-  // purpose: "",
-  // city: "",
-  // address: "",
 
   const fetchProperty = async () => {
     const id = props?.match?.params?.id;
     const propObj = await getProperty(id);
     setProperty(propObj.data.data);
+    ///
   };
 
   const history = useHistory();
@@ -46,8 +33,27 @@ const DetailPage = (props: any): any => {
           <Card.Header>Property Details</Card.Header>
           <Card.Body>
             <Card.Title> {property.title}</Card.Title>
-            <Card.Text>Images comes here: (not implemented)</Card.Text>
-            <Card.Text className='text-center'>
+            <Carousel>
+              {(property.images ||[]).map(({ path }: any) => {
+                return (
+                  <Carousel.Item interval={2000}>
+                    <img
+                      className="d-block w-100"
+                      src={path.replace('public','')}
+                      alt="First slide"
+                    />
+                    <Carousel.Caption>
+                      {/* <h3>First slide label</h3>
+                      <p>
+                        Nulla vitae elit libero, a pharetra augue mollis
+                        interdum.
+                      </p> */}
+                    </Carousel.Caption>
+                  </Carousel.Item>
+                );
+              })}
+            </Carousel>
+            <Card.Text className="text-center">
               <Row>
                 <Col md="6">Address: {property.address}</Col>
                 <Col md="6">Sq Area: {property.sqArea} </Col>
@@ -58,11 +64,14 @@ const DetailPage = (props: any): any => {
             </Card.Text>
 
             <Card.Text>{property.description}</Card.Text>
-            <Button variant="primary" onClick={()=>{}}>
+            <Button variant="primary" onClick={() => {}}>
               {property.purpose === "rent" ? "Rent" : "Buy"} Property
             </Button>
 
-            <Button variant="secondary" onClick={()=> history.push('/property-list')}>
+            <Button
+              variant="secondary"
+              onClick={() => history.push("/list-property")}
+            >
               go back to list
             </Button>
           </Card.Body>

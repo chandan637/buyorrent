@@ -6,7 +6,7 @@ const propertySchema: Schema = new Schema(
     title: String,
     sqArea: Number,
     description: String,
-    images: [{ url: String, name: String }],
+    images: [{ originalname: String, filename: String, path: String, size: Number }],
     price: Number,
     priceCycle: String,
     contactNo: String,

@@ -4,7 +4,7 @@ export interface Property {
   title: string;
   sqArea: Number;
   description: string,
-  images: { url: string, name: string }[];
+  images: any[];
   price: Number;
   priceCycle: priceCycle;
   contactNo: string;

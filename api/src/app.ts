@@ -1,7 +1,6 @@
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
-import helmet from 'helmet';
 import hpp from 'hpp';
 import morgan from 'morgan';
 import compression from 'compression';
@@ -67,7 +66,7 @@ class App {
 
   constructor(routes: Routes[]) {
     this.app = express();
-    this.port = process.env.PORT || 8888;
+    this.port = process.env.PORT || 3333;
     this.env = process.env.NODE_ENV || 'development';
 
     this.connectToDatabase();
@@ -116,7 +115,6 @@ class App {
     }
 
     this.app.use(hpp());
-    // this.app.use(helmet());
     this.app.use(compression());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
@@ -177,10 +175,14 @@ class App {
     this.app.use(errorMiddleware);
   }
   private initStatic() {
+    this.app.use(express.static(path.join(__dirname, '../public')));
+
     this.app.use(express.static(path.join(__dirname, '../../ui/build')));
+
     this.app.get('/', (req, res) => {
       res.sendFile(path.join(__dirname, '../../ui/build', 'index.html'));
     });
+
     this.app.get('*', (req, res) => {
       res.sendFile(path.join(__dirname, '../../ui/build', 'index.html'));
     });

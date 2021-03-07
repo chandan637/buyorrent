@@ -13,3 +13,7 @@ cd api
 npm i 
 npm run dev 
 ```
+### Run with docker compose
+```
+docker-compose up
+```
